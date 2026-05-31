@@ -163,13 +163,13 @@
             <!-- 9. ADMIN HUB -->
             <section id="admin" class="page-section">
                 <h2>⚙️ Tinka Tech Admin Hub</h2>
-                <div class="card warning" style="border-left-color: #ef4444;">
+                
+                <!-- 9A. FOMU YA KUINGIA (Hii itafichwa baada ya login) -->
+                <div id="admin-login-area" class="card warning" style="border-left-color: #ef4444;">
                     <h3>Eneo Linalodhibitiwa</h3>
-                    <div id="admin-login-area">
-                        <label>Ingiza Nenosiri la Admin:</label>
-                        <input type="password" id="admin-login-pass" placeholder="***">
-                        <button onclick="loginAdmin()" class="submit-btn" style="background-color: #ef4444;">Ingia Kwenye Jopo</button>
-                    </div>
+                    <label>Ingiza Nenosiri la Admin:</label>
+                    <input type="password" id="admin-login-pass" placeholder="***">
+                    <button onclick="loginAdmin()" class="submit-btn" style="background-color: #ef4444;">Ingia Kwenye Jopo</button>
 
                     <div style="margin-top: 25px; padding-top: 15px; border-top: 1px dashed #4b5563;">
                         <p onclick="togglePasswordReset()" style="font-size: 12px; color: #9ca3af; cursor: pointer; user-select: none;">🔐 Kubadili Nenosiri (Super Admin)?</p>
@@ -181,15 +181,20 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- 9B. JOPO LA NDANI LA MSIMAMIZI (Litaonekana tu login ikiwa sahihi) -->
+                <div id="admin-dashboard-area" style="display: none; margin-top: 20px;">
+                    <div class="card success" style="border-left-color: #10b981; background-color: #1f2937; padding: 20px; border-radius: 8px;">
+                        <h3 style="color: #10b981; margin-top: 0;">🛠️ Jopo Kuu la Udhibiti wa Ligi</h3>
+                        <p style="font-size: 14px; color: #9ca3af; margin-bottom: 20px;">Karibu, mifumo yote iko salama. Chagua amri ya kutekeleza:</p>
+                        
+                        <div style="display: grid; gap: 12px;">
+                            <button class="submit-btn" style="background-color: #3b82f6; margin: 0; padding: 12px;">📋 Hakiki Malipo ya Wachezaji (Verify)</button>
+                            <button class="submit-btn" style="background-color: #10b981; margin: 0; padding: 12px;">🎲 Panga Makundi Kiotomatiki (Generate Groups)</button>
+                            <button class="submit-btn" style="background-color: #f59e0b; margin: 0; padding: 12px;">🔄 Sasisha / Badilisha Matokeo ya Mechi</button>
+                            <button class="submit-btn" style="background-color: #ef4444; margin: 0; padding: 12px;">🔒 Funga Msimu & Tangaza Mshindi</button>
+                        </div>
+                    </div>
+                </div>
             </section>
-
-            <div class="ad-slot-holder" style="margin-top: 30px;">
-                <p style="font-size: 11px; color: #6b7280; text-align: center; margin: 0;">Advertisement</p>
-            </div>
-
-        </main>
-    </div>
-
-    <script src="app.js"></script>
-</body>
-</html>
+            
