@@ -1,22 +1,18 @@
 // ====== 1. MFUMO WA KUBADILI KURASA (MENU ROUTING) + AUTO SCROLL ======
 function showPage(pageId) {
-    // Ondoa active class kwenye kurasa zote za yaliyomo
     document.querySelectorAll('.page-section').forEach(section => {
         section.classList.remove('active-page');
     });
     
-    // Ondoa active class kwenye vifungo vyote vya menu ya pembeni
     document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.classList.remove('active');
     });
 
-    // Washa ukurasa husika kwa usahihi kabisa hapa
     const targetPage = document.getElementById(pageId);
     if (targetPage) {
         targetPage.classList.add('active-page');
     }
     
-    // Weka muonekano wa rangi ya bluu (active) kwenye kifungo kilichobonyezwa
     const activeBtn = Array.from(document.querySelectorAll('.nav-btn')).find(btn => {
         const onclickAttr = btn.getAttribute('onclick');
         return onclickAttr && onclickAttr.includes(pageId);
@@ -25,7 +21,6 @@ function showPage(pageId) {
         activeBtn.classList.add('active');
     }
 
-    // Kama mtumiaji yuko kwenye simu, ishushie skrini kiotomatiki hadi kwenye content
     if (window.innerWidth <= 768) {
         const mainContent = document.querySelector('.main-content');
         if (mainContent) {
@@ -34,7 +29,7 @@ function showPage(pageId) {
     }
 }
 
-// ====== 2. KUCHUJA FOMU YA MALIPO (ON/OFF YA TRANSACTION ID) ======
+// ====== 2. KUCHUJA FOMU YA MALIPO ======
 function togglePaymentFields() {
     const method = document.getElementById('pay-method').value;
     const txField = document.getElementById('transaction-field');
@@ -43,7 +38,7 @@ function togglePaymentFields() {
     }
 }
 
-// ====== 3. MTAMBO WA SIRI WA PREMIUM (EASTER EGG) ======
+// ====== 3. MTAMBO WA SIRI WA PREMIUM ======
 let secretClicks = 0;
 function triggerSecretEngine() {
     secretClicks++;
@@ -52,12 +47,12 @@ function triggerSecretEngine() {
         if (secretContainer) {
             secretContainer.style.display = 'block';
         }
-        alert("🚨 Mtambo wa siri wa Eft-V13 umewashwa! Ingiza neno la siri kwenye kisanduku chini.");
+        alert("🚨 Mtambo wa siri wa Eft-V13 umewashwa! Ingiza neno la siri.");
         secretClicks = 0;
     }
 }
 
-// ====== 4. USHAHIDI WA USAJILI (Kutuma Vercel Serverless API) ======
+// ====== 4. USHAHIDI WA USAJILI ======
 async function handleRegistration(event) {
     event.preventDefault();
     
@@ -130,7 +125,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
 });
 
 const installBtn = document.getElementById('install-btn');
-    if (installBtn) {
+if (installBtn) {
     installBtn.addEventListener('click', async () => {
         if (deferredPrompt) {
             deferredPrompt.prompt();
@@ -144,7 +139,7 @@ const installBtn = document.getElementById('install-btn');
     });
 }
 
-// ====== 6. USIMAMIZI WA PASSWORD YA ADMIN ("senior") ======
+// ====== 6. USIMAMIZI WA PASSWORD YA ADMIN ======
 function togglePasswordReset() {
     const area = document.getElementById('password-reset-area');
     if (area) {
@@ -176,6 +171,7 @@ function changeAdminPassword() {
     }
 }
 
+// ====== 7. LOGIN NA KUFUNGUA JOPO LA ADMIN ======
 function loginAdmin() {
     const inputPass = document.getElementById('admin-login-pass').value;
     const currentAdminPass = localStorage.getItem('eftAdminPassword') || "tinka2026";
@@ -183,15 +179,15 @@ function loginAdmin() {
     if (inputPass === currentAdminPass) {
         alert("🛡️ Karibu Kwenye Jopo la Usimamizi la Tinka Tech!");
         
-        // HAPA NDIPO TUNAPOFUNGUA JOPO SASA:
         const loginArea = document.getElementById('admin-login-area');
         const dashboardArea = document.getElementById('admin-dashboard-area');
         
         if (loginArea && dashboardArea) {
-            loginArea.style.display = 'none';       // Ficha kiboksi cha kuandika password
-            dashboardArea.style.display = 'block';   // Onyesha mavitufe ya usimamizi!
+            loginArea.style.display = 'none';
+            dashboardArea.style.display = 'block';
         }
     } else {
         alert("❌ Nenosiri si sahihi!");
     }
-}
+        }
+        
