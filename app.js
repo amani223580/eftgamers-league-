@@ -182,6 +182,15 @@ function loginAdmin() {
 
     if (inputPass === currentAdminPass) {
         alert("🛡️ Karibu Kwenye Jopo la Usimamizi la Tinka Tech!");
+        
+        // HAPA NDIPO TUNAPOFUNGUA JOPO SASA:
+        const loginArea = document.getElementById('admin-login-area');
+        const dashboardArea = document.getElementById('admin-dashboard-area');
+        
+        if (loginArea && dashboardArea) {
+            loginArea.style.display = 'none';       // Ficha kiboksi cha kuandika password
+            dashboardArea.style.display = 'block';   // Onyesha mavitufe ya usimamizi!
+        }
     } else {
         alert("❌ Nenosiri si sahihi!");
     }
