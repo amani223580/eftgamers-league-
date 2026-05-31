@@ -12,11 +12,9 @@
 
     <div class="app-container">
         
-        <!-- SIDEBAR MENU -->
         <aside class="sidebar">
             <h2>🏆 EFT GAMERS</h2>
             
-            <!-- Icon na Kitufe cha Download -->
             <div id="install-container" style="display: none; text-align: center; margin-bottom: 20px; background: #1e3a8a; padding: 10px; border-radius: 8px;">
                 <img src="icon.png" alt="App Icon" style="width: 50px; height: 50px; border-radius: 10px; margin-bottom: 5px;">
                 <button id="install-btn" class="submit-btn" style="background-color: #f59e0b; margin-top: 0; padding: 8px; font-size: 12px;">📲 Bonyeza Hapa Kuipakua App</button>
@@ -35,14 +33,11 @@
             </nav>
         </aside>
 
-        <!-- MAIN CONTENT AREA -->
         <main class="main-content">
             
-            <!-- 1. HOME PAGE (Sheria Zote Zimerudi) -->
             <section id="home" class="page-section active-page">
                 <h2>Karibu EftGamers-League Hub</h2>
                 <p>Mfumo thabiti wa kiotomatiki unaoendesha mashindano ya eFootball kuanzia usajili hadi kutwaa taji.</p>
-                
                 <div class="rules-grid">
                     <div class="card warning">
                         <h3>⚙  Sheria za Michezo (Gameplay)</h3>
@@ -63,14 +58,8 @@
                         </ul>
                     </div>
                 </div>
-
-                <div class="payment-box" style="margin-top: 20px;">
-                    <h3>Maelekezo ya Kiingilio</h3>
-                    <p>Tuma kiingilio cha <strong>TZS 1,000</strong> kwenda namba <strong>0792460625</strong>, kisha nenda menyu ya "Jisajili Hapa".</p>
-                </div>
             </section>
 
-            <!-- 2. REGISTER PAGE -->
             <section id="register" class="page-section">
                 <h2>📝 Fomu ya Usajili Rasmi</h2>
                 <form id="reg-form" onsubmit="handleRegistration(event)">
@@ -103,68 +92,57 @@
                 </div>
             </section>
 
-            <!-- 3. CONTACTS PAGE -->
             <section id="contacts" class="page-section">
-                <h2>📅 Ratiba & Mawasiliano ya Wachezaji</h2>
-                <div class="card info">
-                    <div id="contacts-list" style="color: #9ca3af;">[Kanzidata ya mawasiliano itapakia hapa kutoka Supabase...]</div>
-                </div>
+                <h2>📅 Ratiba & Mawasiliano</h2>
+                <div class="card info"><div id="contacts-list" style="color: #9ca3af;">[Kanzidata itapakia hapa...]</div></div>
             </section>
 
-            <!-- 4. SUBMIT RESULTS PAGE -->
             <section id="submit-results" class="page-section">
                 <h2>⚽ Tuma Matokeo ya Mechi</h2>
                 <form id="results-form">
                     <label>Chagua Mechi yako:</label>
                     <select id="match-select"><option value="">-- Hakuna mechi amilifu kwa sasa --</option></select>
                     <div style="display: flex; gap: 20px; margin-top: 15px;">
-                        <div style="flex: 1;"><label>Magoli ya Home:</label><input type="number" min="0" placeholder="0"></div>
-                        <div style="flex: 1;"><label>Magoli ya Away:</label><input type="number" min="0" placeholder="0"></div>
+                        <div style="flex: 1;"><label>Home:</label><input type="number" min="0" placeholder="0"></div>
+                        <div style="flex: 1;"><label>Away:</label><input type="number" min="0" placeholder="0"></div>
                     </div>
                     <button type="button" class="submit-btn" style="background-color: #3b82f6;">Tuma Matokeo</button>
                 </form>
             </section>
 
-            <!-- 5. LIVE SCORES PAGE -->
             <section id="live-scores" class="page-section">
-                <h2>📊 Matokeo ya Mechi (Full Time Scores)</h2>
+                <h2>📊 Matokeo ya Mechi</h2>
                 <div id="live-scores-container"><p style="color: #9ca3af;">Bado hakuna mechi zilizochezwa.</p></div>
             </section>
 
-            <!-- 6. STANDINGS PAGE (JEDWALI LILILOREKEBISHWA) -->
             <section id="standings" class="page-section">
-                <h2>📈 Jedwali la Msimamo wa Makundi</h2>
+                <h2>📈 Jedwali la Msimamo</h2>
                 <div class="card info" style="overflow-x: auto;">
                     <table style="width: 100%; min-width: 600px; border-collapse: collapse; text-align: center; color: white;">
                         <tr style="background-color: #374151; border-bottom: 2px solid #1f2937;">
-                            <th style="padding: 12px; text-align: left;">Timu/Mchezaji</th>
-                            <th>Pld</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th style="color: #10b981;">Pts</th>
+                            <th style="padding: 12px; text-align: left;">Timu/Mchezaji</th><th>Pld</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th style="color: #10b981;">Pts</th>
                         </tr>
                         <tr style="border-bottom: 1px solid #374151;">
-                            <td style="padding: 12px; text-align: left;">1. Mfano_User</td>
-                            <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td style="color: #10b981; font-weight: bold;">0</td>
+                            <td style="padding: 12px; text-align: left;">1. Mfano_User</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td style="color: #10b981; font-weight: bold;">0</td>
                         </tr>
                     </table>
                 </div>
             </section>
 
-            <!-- 7. KNOCKOUTS PAGE -->
             <section id="knockouts" class="page-section">
-                <h2>🏆 Msimamo wa Hatua za Mtoano (Knockouts)</h2>
+                <h2>🏆 Hatua ya Mtoano</h2>
                 <div class="card warning"><p style="text-align: center; color: #9ca3af;">Hatua ya Mtoano bado haijaanza.</p></div>
             </section>
 
-            <!-- 8. FIXTURES PAGE -->
             <section id="fixtures" class="page-section">
                 <h2>🗓️ Ratiba Kamili</h2>
-                <div id="fixtures-list" style="color: #9ca3af;">[Ratiba itapakia baada ya usajili kukamilika...]</div>
+                <div id="fixtures-list" style="color: #9ca3af;">[Ratiba itapakia hapa...]</div>
             </section>
 
-            <!-- 9. ADMIN HUB -->
+            <!-- ADMIN HUB MPYA INAYOFUNGUKA JOPO -->
             <section id="admin" class="page-section">
                 <h2>⚙️ Tinka Tech Admin Hub</h2>
                 
-                <!-- 9A. FOMU YA KUINGIA (Hii itafichwa baada ya login) -->
                 <div id="admin-login-area" class="card warning" style="border-left-color: #ef4444;">
                     <h3>Eneo Linalodhibitiwa</h3>
                     <label>Ingiza Nenosiri la Admin:</label>
@@ -182,7 +160,6 @@
                     </div>
                 </div>
 
-                <!-- 9B. JOPO LA NDANI LA MSIMAMIZI (Litaonekana tu login ikiwa sahihi) -->
                 <div id="admin-dashboard-area" style="display: none; margin-top: 20px;">
                     <div class="card success" style="border-left-color: #10b981; background-color: #1f2937; padding: 20px; border-radius: 8px;">
                         <h3 style="color: #10b981; margin-top: 0;">🛠️ Jopo Kuu la Udhibiti wa Ligi</h3>
@@ -197,4 +174,10 @@
                     </div>
                 </div>
             </section>
-            
+
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
