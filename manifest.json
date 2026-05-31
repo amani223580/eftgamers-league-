@@ -1,0 +1,16 @@
+{
+  "name": "eftgamers-league",
+  "short_name": "EftGamers",
+  "description": "Mfumo thabiti wa kuendesha eFootball Tournaments",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#111827",
+  "theme_color": "#1e40af",
+  "icons": [
+    {
+      "src": "https://img.icons8.com/fluency/512/trophy.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
