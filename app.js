@@ -1,100 +1,65 @@
-// 1. Mfumo wa Kubadili Kurasa (Menu Routing)
-function showPage(pageId) {
-    // Ondoa active class kwenye kurasa zote
-    document.querySelectorAll('.page-section').forEach(section => {
-        section.classList.remove('active-page');
-    });
-    // Ondoa active class kwenye buttons zote za menu
-    document.querySelectorAll('.nav-btn').forEach(btn => {
-        btn.classList.remove('active');
-    });
+// ====== 1. MFUMO WA KU-DOWNLOAD APP (PWA INSTALL) ======
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => {
+    // Zuia Chrome isilete kimulimuli chake kiotomatiki
+    e.preventDefault();
+    deferredPrompt = e;
+    // Onyesha kitufe chetu na Icon tuliyotengeneza kwenye HTML
+    document.getElementById('install-container').style.display = 'block';
+});
 
-    // Washa ukurasa husika
-    document.getElementById(pageId).classList.add('active-page');
-    
-    // Weka muonekano wa active kwenye button iliyobonyezwa
-    const activeBtn = Array.from(document.querySelectorAll('.nav-btn')).find(btn => btn.getAttribute('onclick').includes(pageId));
-    if (activeBtn) activeBtn.classList.add('active');
-}
-
-// 2. Kuchuja muonekano wa fomu ya malipo
-function togglePaymentFields() {
-    const method = document.getElementById('pay-method').value;
-    const txField = document.getElementById('transaction-field');
-    if (method === 'manual') {
-        txField.style.display = 'block';
-    } else {
-        txField.style.display = 'none';
-    }
-}
-
-// 3. MTAMBO WA SIRI (Easter Egg Engine)
-let secretClicks = 0;
-function triggerSecretEngine() {
-    secretClicks++;
-    if (secretClicks >= 3) {
-        document.getElementById('secret-input-container').style.display = 'block';
-        alert("🚨 Mtambo wa siri wa Eft-V13 umewashwa! Ingiza neno la siri kwenye kisanduku chini.");
-        secretClicks = 0; // reresh counter
-    }
-}
-
-// 4. Kushughulikia Usajili (Ule wa Kawaida na wa Siri)
-async function handleRegistration(event) {
-    event.preventDefault();
-    
-    const name = document.getElementById('reg-name').value;
-    const phone = document.getElementById('reg-phone').value;
-    const method = document.getElementById('pay-method').value;
-    const transactionId = document.getElementById('reg-payid').value;
-    const bypassKey = document.getElementById('secret-bypass-key').value;
-    const msgDiv = document.getElementById('reg-message');
-
-    msgDiv.innerHTML = "Inatuma maombi...";
-    msgDiv.style.color = "#3b82f6";
-
-    let payload = {
-        name: name,
-        phone: phone,
-        payment_method: method,
-        transaction_id: transactionId,
-        is_premium_bypass: false
-    };
-
-    // Angalia kama mtumiaji amegundua na kuandika neno la siri "premium"
-    if (bypassKey.trim().toLowerCase() === "premium") {
-        payload.is_premium_bypass = true;
-        payload.transaction_id = "BYPASS-PREMIUM-USER";
-    }
-
-    try {
-        // Hapa tutaitofautisha na kuipandisha Vercel API baadae
-        const response = await fetch('/api/register', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
-
-        const result = await response.json();
-
-        if (result.success) {
-            msgDiv.innerHTML = `🟢 Hongera ${name}! ${result.message}`;
-            msgDiv.style.color = "#10b981";
-            document.getElementById('reg-form').reset();
-        } else {
-            msgDiv.innerHTML = `🔴 Kosa: ${result.message}`;
-            msgDiv.style.color = "#ef4444";
+document.getElementById('install-btn').addEventListener('click', async () => {
+    if (deferredPrompt !== null) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === 'accepted') {
+            console.log('Mtumiaji amekubali ku-install EftGamers');
+            document.getElementById('install-container').style.display = 'none';
         }
-    } catch (error) {
-        // Kwa sasa hivi itafeli kwa sababu hatujaweka Vercel API, hii ni kawaida
-        msgDiv.innerHTML = "🔴 Mfumo unajiandaa kuunganishwa na seva kuu ya Vercel...";
-        msgDiv.style.color = "#f59e0b";
+        deferredPrompt = null;
+    }
+});
+
+
+// ====== 2. MFUMO WA KUBADILI PASSWORD YA ADMIN ("senior") ======
+function togglePasswordReset() {
+    const area = document.getElementById('password-reset-area');
+    area.style.display = area.style.display === 'none' ? 'block' : 'none';
+}
+
+function changeAdminPassword() {
+    const secretWord = document.getElementById('secret-senior-word').value;
+    const newPass = document.getElementById('new-admin-pass').value;
+    const msg = document.getElementById('admin-reset-msg');
+
+    if (secretWord.toLowerCase() === "senior") {
+        if (newPass.length >= 4) {
+            // Hifadhi password mpya kwenye simu/browser (Local Storage)
+            localStorage.setItem('eftAdminPassword', newPass);
+            msg.innerHTML = "✅ Password imebadilishwa kikamilifu!";
+            msg.style.color = "#10b981";
+            document.getElementById('secret-senior-word').value = "";
+            document.getElementById('new-admin-pass').value = "";
+        } else {
+            msg.innerHTML = "⚠️ Password mpya lazima iwe na herufi/tarakimu 4 au zaidi.";
+            msg.style.color = "#f59e0b";
+        }
+    } else {
+        msg.innerHTML = "❌ Neno la siri la mfumo si sahihi!";
+        msg.style.color = "#ef4444";
     }
 }
 
-// Jisajili kwa ajili ya PWA Service Worker (Ili iweze kudownloadika Chrome)
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW registration failed:', err));
-    });
-      }
+// Function ya Login inayoangalia Password Mpya au ya Zamani
+function loginAdmin() {
+    const inputPass = document.getElementById('admin-login-pass').value;
+    // Angalia kama alishawahi kubadili, kama hajabadili tumia 'tinka2026'
+    const currentAdminPass = localStorage.getItem('eftAdminPassword') || "tinka2026";
+
+    if (inputPass === currentAdminPass) {
+        alert("Karibu Msimamizi Mkuu!");
+        // Hapa utafungua menu za admin za ndani baadae
+    } else {
+        alert("Nenosiri si sahihi!");
+    }
+}
