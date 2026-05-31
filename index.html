@@ -4,12 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EftGamers League 🎮</title>
-    
     <link rel="manifest" href="/manifest.json">
     <link rel="stylesheet" href="style.css">
-    
     <meta name="theme-color" content="#1e40af">
-    <meta name="description" content="Mfumo thabiti wa kiotomatiki unaoendesha mashindano ya eFootball kuanzia usajili hadi kutwaa taji.">
+    <style>
+        /* Mitindo midogo ya ziada kwa ajili ya majedwali ya Admin na Hali */
+        .status-badge { padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
+        .status-pending { background-color: #f59e0b; color: #111827; }
+        .status-verified { background-color: #10b981; color: white; }
+        .admin-table { width: 100%; border-collapse: collapse; margin-top: 15px; color: white; text-align: left; }
+        .admin-table th, .admin-table td { padding: 10px; border-bottom: 1px solid #374151; font-size: 14px; }
+        .admin-table th { background-color: #1f2937; color: #3b82f6; }
+        .mini-btn { padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 12px; }
+    </style>
 </head>
 <body>
 
@@ -19,18 +26,17 @@
             <h2 style="text-align: center; margin-bottom: 10px;">🏆 EFT GAMERS</h2>
             
             <div id="install-container" style="display: none; text-align: center; margin-bottom: 20px; background: #1e3a8a; padding: 10px; border-radius: 8px;">
-                <img src="icon.png" alt="App Icon" style="width: 50px; height: 50px; border-radius: 10px; margin-bottom: 5px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
-                <button id="install-btn" class="submit-btn" style="background-color: #f59e0b; margin-top: 0; padding: 8px; font-size: 12px;">📲 Bonyeza Hapa Kuipakua App</button>
+                <img src="icon.png" alt="App Icon" style="width: 50px; height: 50px; border-radius: 10px; margin-bottom: 5px;">
+                <button id="install-btn" class="submit-btn" style="background-color: #f59e0b; margin-top: 0; padding: 8px; font-size: 12px;">📲 Pakua App</button>
             </div>
 
             <nav>
                 <button onclick="showPage('home')" class="nav-btn active">🏠 Home & Sheria</button>
                 <button onclick="showPage('register')" class="nav-btn">📝 Jisajili Hapa</button>
-                <button onclick="showPage('contacts')" class="nav-btn">📅 Ratiba & Mawasiliano</button>
+                <button onclick="showPage('contacts')" class="nav-btn">📅 Wachezaji Waliojisajili</button>
                 <button onclick="showPage('submit-results')" class="nav-btn">⚽ Tuma Matokeo</button>
                 <button onclick="showPage('live-scores')" class="nav-btn">📊 Matokeo ya Mechi</button>
                 <button onclick="showPage('standings')" class="nav-btn">📈 Msimamo wa Ligi</button>
-                <button onclick="showPage('knockouts')" class="nav-btn">🏆 Msimamo wa Knockouts</button>
                 <button onclick="showPage('fixtures')" class="nav-btn">🗓️ Ratiba Kamili</button>
                 <button onclick="showPage('admin')" class="nav-btn">⚙️ Admin Hub</button>
             </nav>
@@ -41,31 +47,22 @@
             <section id="home" class="page-section active-page">
                 <h2>Karibu EftGamers-League Hub</h2>
                 <p>Mfumo thabiti wa kiotomatiki unaoendesha mashindano ya eFootball kuanzia usajili hadi kutwaa taji.</p>
-                
                 <div class="rules-grid">
                     <div class="card warning">
                         <h3>⚙  Sheria za Michezo (Gameplay)</h3>
                         <ul>
-                            <li><strong>Control:</strong> Full Human Controlled (Ni marufuku kutumia AI).</li>
-                            <li><strong>Smart Assist:</strong> NO Smart Assist (Imezuiwa kabisa).</li>
+                            <li><strong>Control:</strong> Full Human Controlled (No AI).</li>
+                            <li><strong>Smart Assist:</strong> Imezuiwa kabisa.</li>
                             <li><strong>Muda wa Mechi:</strong> Dakika 10.</li>
-                            <li><strong>Makundi:</strong> Hakuna Extra Time wala Penati. Mechi inaweza kuisha kwa Droo.</li>
-                            <li><strong>Knockouts:</strong> Lazima mshindi apatikane (Extra Time & Penati).</li>
                         </ul>
                     </div>
                     <div class="card info">
                         <h3>🏆 Mfumo wa Mashindano</h3>
                         <ul>
-                            <li>Ligi inajaza wachezaji 16 kiwango cha juu, lakini inanyumbuka.</li>
-                            <li>Wachezaji wanagawanywa kwenye makundi kiotomatiki.</li>
-                            <li>Viongozi wa makundi wanaenda Robo Fainali, Nusu Fainali hadi Fainali.</li>
+                            <li>Kila Ligi inachukua kiwango cha juu cha wachezaji 16. Mfumo unafungua Ligi mpya ikijaa.</li>
+                            <li>Ratiba inatengenezwa kiotomatiki kwa wachezaji waliothibitishwa tu!</li>
                         </ul>
                     </div>
-                </div>
-
-                <div class="payment-box" style="margin-top: 20px;">
-                    <h3>Maelekezo ya Kiingilio</h3>
-                    <p>Tuma kiingilio cha <strong>TZS 1,000</strong> kwenda namba <strong>0792460625</strong>, kisha nenda kwenye menyu ya "Jisajili Hapa" kujaza fomu.</p>
                 </div>
             </section>
 
@@ -81,7 +78,7 @@
                     <label>Njia ya Malipo:</label>
                     <select id="pay-method" onchange="togglePaymentFields()">
                         <option value="azampay">Lipa Moja kwa Moja (Push Utility)</option>
-                        <option value="manual">Nimeshalipa / Nitaweka Namba ya Muamala</option>
+                        <option value="manual">Nimeshalipa / Nitaweka Transaction ID</option>
                     </select>
 
                     <div id="transaction-field" style="display:none; margin-top: 15px;">
@@ -91,11 +88,10 @@
 
                     <button type="submit" class="submit-btn">Kamilisha Usajili</button>
                 </form>
-                
                 <div id="reg-message" style="margin-top: 20px; font-weight: bold; text-align: center;"></div>
 
                 <div class="easter-egg-zone">
-                    <p onclick="triggerSecretEngine()" style="font-size: 10px; color: #4b5563; cursor: pointer; margin-top: 60px; text-align: center; user-select: none;">Engine Version: Eft-V13.0.26</p>
+                    <p onclick="triggerSecretEngine()" style="font-size: 10px; color: #4b5563; cursor: pointer; margin-top: 60px; text-align: center;">Engine Version: Eft-V13.0.26</p>
                     <div id="secret-input-container" style="display: none; text-align: center; margin-top: 10px;">
                         <input type="password" id="secret-bypass-key" placeholder="System Override Key..." style="font-size: 12px; padding: 5px; width: 200px; text-align: center; background-color: #111827; border: 1px solid #374151; color: #10b981;">
                     </div>
@@ -103,9 +99,11 @@
             </section>
 
             <section id="contacts" class="page-section">
-                <h2>📅 Ratiba & Mawasiliano ya Wachezaji</h2>
-                <div class="card info">
-                    <div id="contacts-list" style="color: #9ca3af;">[Kanzidata ya mawasiliano itapakia hapa kutoka Supabase...]</div>
+                <h2>📅 Orodha ya Wachezaji Waliojisajili (Live)</h2>
+                <p style="font-size: 14px; color: #9ca3af; margin-bottom: 15px;">Ukijisajili tu, jina lako linatokea hapa papo hapo likisubiri kuhakikiwa na Admin.</p>
+                <div class="card info" style="overflow-x: auto;">
+                    <div id="contacts-list">
+                        </div>
                 </div>
             </section>
 
@@ -113,68 +111,32 @@
                 <h2>⚽ Tuma Matokeo ya Mechi</h2>
                 <form id="results-form">
                     <label>Chagua Mechi yako:</label>
-                    <select id="match-select">
-                        <option value="">-- Hakuna mechi amilifu kwa sasa --</option>
-                    </select>
-
+                    <select id="match-select"><option value="">-- Hakuna mechi amilifu kwa sasa --</option></select>
                     <div style="display: flex; gap: 20px; margin-top: 15px;">
-                        <div style="flex: 1;">
-                            <label>Magoli ya Nyumbani (Home):</label>
-                            <input type="number" id="home-score" min="0" placeholder="0">
-                        </div>
-                        <div style="flex: 1;">
-                            <label>Magoli ya Ugenini (Away):</label>
-                            <input type="number" id="away-score" min="0" placeholder="0">
-                        </div>
+                        <div style="flex: 1;"><label>Home:</label><input type="number" min="0" placeholder="0"></div>
+                        <div style="flex: 1;"><label>Away:</label><input type="number" min="0" placeholder="0"></div>
                     </div>
-
-                    <button type="button" class="submit-btn" style="background-color: #3b82f6;">Tuma Matokeo Sasa</button>
+                    <button type="button" class="submit-btn" style="background-color: #3b82f6;">Tuma Matokeo</button>
                 </form>
             </section>
 
             <section id="live-scores" class="page-section">
-                <h2>📊 Matokeo ya Mechi (Full Time Scores)</h2>
-                <div id="live-scores-container">
-                    <p style="color: #9ca3af;">Bado hakuna mechi zilizochezwa.</p>
-                </div>
+                <h2>📊 Matokeo ya Mechi</h2>
+                <div id="live-scores-container"><p style="color: #9ca3af;">Bado hakuna mechi zilizochezwa.</p></div>
             </section>
 
             <section id="standings" class="page-section">
-                <h2>📈 Jedwali la Msimamo wa Makundi</h2>
+                <h2>📈 Jedwali la Msimamo</h2>
                 <div class="card info" style="overflow-x: auto;">
-                    <table style="width: 100%; min-width: 600px; border-collapse: collapse; text-align: center; color: white;">
-                        <tr style="background-color: #374151; border-bottom: 2px solid #1f2937;">
-                            <th style="padding: 12px; text-align: left;">Timu/Mchezaji</th>
-                            <th>Pld</th>
-                            <th>W</th>
-                            <th>D</th>
-                            <th>L</th>
-                            <th>GF</th>
-                            <th>GA</th>
-                            <th>GD</th>
-                            <th style="color: #10b981;">Pts</th>
-                        </tr>
-                        <tr style="border-bottom: 1px solid #374151;">
-                            <td style="padding: 12px; text-align: left;">1. Timu itatokea hapa</td>
-                            <td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td style="color: #10b981; font-weight: bold;">0</td>
-                        </tr>
-                    </table>
-                </div>
-            </section>
-
-            <section id="knockouts" class="page-section">
-                <h2>🏆 Msimamo wa Hatua za Mtoano (Knockouts)</h2>
-                <div class="card warning">
-                    <p style="text-align: center; color: #9ca3af;">Hatua ya Mtoano bado haijaanza.</p>
+                    <p style="color: #9ca3af;">Msimamo utatengenezwa mechi zikianza kuchezwa.</p>
                 </div>
             </section>
 
             <section id="fixtures" class="page-section">
-                <h2>🗓️ Ratiba Kamili na Hali ya Sasa</h2>
-                <div class="card">
-                    <div id="fixtures-list" style="color: #9ca3af;">
-                        [Ratiba inapakia kutoka kwenye kanzidata kuu...]
-                    </div>
+                <h2>🗓️ Ratiba Kamili ya Mashindano Rasmi</h2>
+                <p style="font-size: 14px; color: #9ca3af; margin-bottom: 15px;">Ratiba hii inatengenezwa na Admin baada ya wachezaji kukamilisha malipo.</p>
+                <div id="fixtures-list">
+                    <p style="color: #9ca3af;">Bado hakuna ratiba iliyotengenezwa kwa msimu huu.</p>
                 </div>
             </section>
 
@@ -183,7 +145,6 @@
                 
                 <div id="admin-login-area" class="card warning" style="border-left-color: #ef4444;">
                     <h3>Eneo Linalodhibitiwa</h3>
-                    <p style="margin-bottom: 15px; color: #d1d5db;">Ukurasa huu ni kwa ajili ya wasimamizi (Admins) pekee.</p>
                     <label>Ingiza Nenosiri la Admin:</label>
                     <input type="password" id="admin-login-pass" placeholder="***">
                     <button onclick="loginAdmin()" class="submit-btn" style="background-color: #ef4444;">Ingia Kwenye Jopo</button>
@@ -191,9 +152,9 @@
                     <div style="margin-top: 25px; padding-top: 15px; border-top: 1px dashed #4b5563;">
                         <p onclick="togglePasswordReset()" style="font-size: 12px; color: #9ca3af; cursor: pointer; user-select: none;">🔐 Kubadili Nenosiri (Super Admin)?</p>
                         <div id="password-reset-area" style="display: none; margin-top: 10px;">
-                            <input type="password" id="secret-senior-word" placeholder="Ingiza neno la siri la mfumo...">
-                            <input type="password" id="new-admin-pass" placeholder="Ingiza nenosiri jipya...">
-                            <button onclick="changeAdminPassword()" class="submit-btn" style="background-color: #10b981;">Hifadhi Nenosiri Jipya</button>
+                            <input type="password" id="secret-senior-word" placeholder="Ingiza 'senior'...">
+                            <input type="password" id="new-admin-pass" placeholder="Nenosiri jipya...">
+                            <button onclick="changeAdminPassword()" class="submit-btn" style="background-color: #10b981;">Hifadhi</button>
                             <p id="admin-reset-msg" style="margin-top: 10px; font-size: 13px;"></p>
                         </div>
                     </div>
@@ -202,26 +163,23 @@
                 <div id="admin-dashboard-area" style="display: none; margin-top: 20px;">
                     <div class="card success" style="border-left-color: #10b981; background-color: #1f2937; padding: 20px; border-radius: 8px;">
                         <h3 style="color: #10b981; margin-top: 0;">🛠️ Jopo Kuu la Udhibiti wa Ligi</h3>
-                        <p style="font-size: 14px; color: #9ca3af; margin-bottom: 20px;">Karibu kiongozi, mifumo yote iko salama. Chagua amri ya kutekeleza:</p>
                         
-                        <div style="display: grid; gap: 12px;">
-                            <button onclick="adminVerifyPayments()" class="submit-btn" style="background-color: #3b82f6; margin: 0; padding: 12px;">📋 Hakiki Malipo ya Wachezaji (Verify)</button>
-                            <button onclick="adminGenerateGroups()" class="submit-btn" style="background-color: #10b981; margin: 0; padding: 12px;">🎲 Panga Makundi Kiotomatiki (Generate Groups)</button>
-                            <button onclick="adminUpdateResults()" class="submit-btn" style="background-color: #f59e0b; margin: 0; padding: 12px;">🔄 Sasisha / Badilisha Matokeo ya Mechi</button>
-                            <button onclick="adminCloseLeague()" class="submit-btn" style="background-color: #ef4444; margin: 0; padding: 12px;">🔒 Funga Msimu & Tangaza Mshindi</button>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 20px;">
+                            <button onclick="adminVerifyPayments()" class="submit-btn" style="background-color: #3b82f6; margin: 0; padding: 12px;">📋 Hakiki Maombi ya Usajili</button>
+                            <button onclick="adminOpenFixtureControl()" class="submit-btn" style="background-color: #10b981; margin: 0; padding: 12px;">🎲 Panga & Kuanzisha Ratiba</button>
+                            <button onclick="adminClearAllData()" class="submit-btn" style="background-color: #ef4444; margin: 0; padding: 12px;">🗑️ Safisha Data Zote (Reset)</button>
+                        </div>
+
+                        <div id="admin-dynamic-content" style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #4b5563;">
+                            <p style="color: #9ca3af; font-style: italic; text-align: center;">Chagua amri hapo juu kusimamia mfumo...</p>
                         </div>
                     </div>
                 </div>
             </section>
-
-            <div class="ad-slot-holder" style="margin-top: 30px; padding: 20px; background-color: #1f2937; border: 1px dashed #4b5563; border-radius: 8px;">
-                <p style="font-size: 11px; color: #6b7280; text-align: center; margin: 0; text-transform: uppercase; letter-spacing: 2px;">Advertisement</p>
-                </div>
 
         </main>
     </div>
 
     <script src="app.js"></script>
 </body>
-                        </html>
-                
+</html>
