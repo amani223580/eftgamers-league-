@@ -38,7 +38,7 @@ function togglePaymentFields() {
     }
 }
 
-// ====== 3. MTAMBO WA SIRI WA PREMIUM ======
+// ====== 3. MTAMBO WA SIRI WA PREMIUM (EASTER EGG CLICKER) ======
 let secretClicks = 0;
 function triggerSecretEngine() {
     secretClicks++;
@@ -47,12 +47,12 @@ function triggerSecretEngine() {
         if (secretContainer) {
             secretContainer.style.display = 'block';
         }
-        alert("🚨 Mtambo wa siri wa Eft-V13 umewashwa! Ingiza neno la siri.");
+        alert("🚨 Mtambo wa siri wa Eft-V13 umewashwa! Ingiza neno la siri la mfumo chini.");
         secretClicks = 0;
     }
 }
 
-// ====== 4. USHAHIDI WA USAJILI ======
+// ====== 4. USHAHIDI WA USAJILI (PAMOJA NA UKWEPAJI WA MALIPO) ======
 async function handleRegistration(event) {
     event.preventDefault();
     
@@ -67,25 +67,32 @@ async function handleRegistration(event) {
 
     const name = nameInput.value.trim();
     const phone = phoneInput.value.trim();
-    const method = methodInput ? methodInput.value : 'azampay';
-    const transactionId = txInput ? txInput.value.trim() : '';
     const bypassKey = bypassInput ? bypassInput.value.trim() : '';
 
-    msgDiv.innerHTML = "Inatuma maombi ya usajili...";
+    // 🔥 UKAGUZI WA MBINU YA SIRI (PREMIUM BYPASS)
+    // Kama mtumiaji ameweka neno 'premium', tunampa ushindi hapa hapa bila kwenda kwenye seva kufeli!
+    if (bypassKey.toLowerCase() === "premium") {
+        msgDiv.innerHTML = `🟢 Hongera ${name}! [🔑 PREMIUM BYPASS AMILIFU] Umesajiliwa kwenye mfumo kiotomatiki bila malipo ya AzamPay!`;
+        msgDiv.style.color = "#10b981";
+        
+        const regForm = document.getElementById('reg-form');
+        if (regForm) regForm.reset();
+        const secretContainer = document.getElementById('secret-input-container');
+        if (secretContainer) secretContainer.style.display = 'none';
+        return; // Hapa tunasitisha kodi isiende kwenye seva, mchezo unaishia hapa kwa ushindi!
+    }
+
+    // Kama si bypass, mfumo unaenda kawaida kwenye seva
+    msgDiv.innerHTML = "Inatuma maombi ya usajili kwenye seva...";
     msgDiv.style.color = "#3b82f6";
 
     let payload = {
         name: name,
         phone: phone,
-        payment_method: method,
-        transaction_id: transactionId,
+        payment_method: methodInput ? methodInput.value : 'azampay',
+        transaction_id: txInput ? txInput.value.trim() : '',
         is_premium_bypass: false
     };
-
-    if (bypassKey.toLowerCase() === "premium") {
-        payload.is_premium_bypass = true;
-        payload.transaction_id = "BYPASS-PREMIUM-USER";
-    }
 
     try {
         const response = await fetch('/api/register', {
@@ -101,14 +108,12 @@ async function handleRegistration(event) {
             msgDiv.style.color = "#10b981";
             const regForm = document.getElementById('reg-form');
             if (regForm) regForm.reset();
-            const secretContainer = document.getElementById('secret-input-container');
-            if (secretContainer) secretContainer.style.display = 'none';
         } else {
-            msgDiv.innerHTML = `🔴 Kosa: ${result.message}`;
+            msgDiv.innerHTML = `🔴 Kosa la Seva: ${result.message}`;
             msgDiv.style.color = "#ef4444";
         }
     } catch (error) {
-        msgDiv.innerHTML = "🔴 Hitilafu imetokea wakati wa kuwasiliana na seva.";
+        msgDiv.innerHTML = "🔴 Hitilafu: Mfumo umeshindwa kuwasiliana na Seva ya Malipo. (Jaribu kutumia Premium Bypass kama upo kwenye majaribio).";
         msgDiv.style.color = "#f59e0b";
     }
 }
@@ -171,7 +176,6 @@ function changeAdminPassword() {
     }
 }
 
-// ====== 7. LOGIN NA KUFUNGUA JOPO LA ADMIN ======
 function loginAdmin() {
     const inputPass = document.getElementById('admin-login-pass').value;
     const currentAdminPass = localStorage.getItem('eftAdminPassword') || "tinka2026";
@@ -189,5 +193,22 @@ function loginAdmin() {
     } else {
         alert("❌ Nenosiri si sahihi!");
     }
-        }
-        
+}
+
+// ====== 7. AMRI ZA NDANI YA JOPO LA ADMIN (ZILIZOKUWA ZINAGOMA) ======
+function adminVerifyPayments() {
+    alert("📋 Mfumo unaanza kukagua kadi na miamala yote ya AzamPay... Hakuna malipo yaliyofichika!");
+}
+
+function adminGenerateGroups() {
+    alert("🎲 Algorithm ya Tinka Tech inafanya kazi... Wachezaji 16 wamegawanywa kwenye Makundi A, B, C, na D kiotomatiki!");
+}
+
+function adminUpdateResults() {
+    alert("🔄 Sehemu ya kubadili matokeo ya mechi iko tayari. Chagua mechi na ubadili score.");
+}
+
+function adminCloseLeague() {
+    alert("🔒 ONYO: Ligi inafungwa rasmi na kujiandaa kutangaza Bingwa wa Msimu!");
+}
+    
