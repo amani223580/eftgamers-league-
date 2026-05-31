@@ -1,63 +1,80 @@
 // ====== 1. MFUMO WA KUBADILI KURASA (MENU ROUTING) + AUTO SCROLL ======
 function showPage(pageId) {
-    // Ondoa active class kwenye kurasa zote
+    // Ondoa active class kwenye kurasa zote za yaliyomo
     document.querySelectorAll('.page-section').forEach(section => {
         section.classList.remove('active-page');
     });
-    // Ondoa active class kwenye buttons zote za menu
+    
+    // Ondoa active class kwenye vifungo vyote vya menu ya pembeni
     document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.classList.remove('active');
     });
 
-    // Washa ukurasa husika
+    // Washa ukurasa husika kwa usahihi kabisa hapa
     const targetPage = document.getElementById(pageId);
     if (targetPage) {
-        targetPage.add('active-page'); // Inatakiwa classList.add, imerekebishwa chini
         targetPage.classList.add('active-page');
     }
     
-    // Weka muonekano wa active kwenye button iliyobonyezwa
-    const activeBtn = Array.from(document.querySelectorAll('.nav-btn')).find(btn => btn.getAttribute('onclick').includes(pageId));
-    if (activeBtn) activeBtn.classList.add('active');
+    // Weka muonekano wa rangi ya bluu (active) kwenye kifungo kilichobonyezwa
+    const activeBtn = Array.from(document.querySelectorAll('.nav-btn')).find(btn => {
+        const onclickAttr = btn.getAttribute('onclick');
+        return onclickAttr && onclickAttr.includes(pageId);
+    });
+    if (activeBtn) {
+        activeBtn.classList.add('active');
+    }
 
-    // Mbinu ya Polymath: Kama yuko kwenye simu, ishushie app kiotomatiki hadi kwenye content
+    // Kama mtumiaji yuko kwenye simu, ishushie skrini kiotomatiki hadi kwenye content
     if (window.innerWidth <= 768) {
-        document.querySelector('.main-content').scrollIntoView({ behavior: 'smooth' });
+        const mainContent = document.querySelector('.main-content');
+        if (mainContent) {
+            mainContent.scrollIntoView({ behavior: 'smooth' });
+        }
     }
 }
 
-// ====== 2. KUCHUJA FOMU YA MALIPO ======
+// ====== 2. KUCHUJA FOMU YA MALIPO (ON/OFF YA TRANSACTION ID) ======
 function togglePaymentFields() {
     const method = document.getElementById('pay-method').value;
     const txField = document.getElementById('transaction-field');
-    if (method === 'manual') {
-        txField.style.display = 'block';
-    } else {
-        txField.style.display = 'none';
+    if (txField) {
+        txField.style.display = (method === 'manual') ? 'block' : 'none';
     }
 }
 
-// ====== 3. MTAMBO WA SIRI WA PREMIUM (Easter Egg) ======
+// ====== 3. MTAMBO WA SIRI WA PREMIUM (EASTER EGG) ======
 let secretClicks = 0;
 function triggerSecretEngine() {
     secretClicks++;
     if (secretClicks >= 3) {
-        document.getElementById('secret-input-container').style.display = 'block';
+        const secretContainer = document.getElementById('secret-input-container');
+        if (secretContainer) {
+            secretContainer.style.display = 'block';
+        }
         alert("🚨 Mtambo wa siri wa Eft-V13 umewashwa! Ingiza neno la siri kwenye kisanduku chini.");
         secretClicks = 0;
     }
 }
 
-// ====== 4. USHAHIDI WA USAJILI (Kutuma Vercel API) ======
+// ====== 4. USHAHIDI WA USAJILI (Kutuma Vercel Serverless API) ======
 async function handleRegistration(event) {
     event.preventDefault();
     
-    const name = document.getElementById('reg-name').value.trim();
-    const phone = document.getElementById('reg-phone').value.trim();
-    const method = document.getElementById('pay-method').value;
-    const transactionId = document.getElementById('reg-payid').value.trim();
-    const bypassKey = document.getElementById('secret-bypass-key').value.trim();
+    const nameInput = document.getElementById('reg-name');
+    const phoneInput = document.getElementById('reg-phone');
+    const methodInput = document.getElementById('pay-method');
+    const txInput = document.getElementById('reg-payid');
+    const bypassInput = document.getElementById('secret-bypass-key');
     const msgDiv = document.getElementById('reg-message');
+
+    if (!nameInput || !phoneInput || !msgDiv) return;
+
+    const name = nameInput.value.trim();
+    const phone = phoneInput.value.trim();
+    const method = methodInput ? methodInput.value : 'azampay';
+    const transactionId = txInput ? txInput.value.trim() : '';
+    const bypassKey = bypassInput ? bypassInput.value.trim() : '';
 
     msgDiv.innerHTML = "Inatuma maombi ya usajili...";
     msgDiv.style.color = "#3b82f6";
@@ -87,8 +104,10 @@ async function handleRegistration(event) {
         if (result.success) {
             msgDiv.innerHTML = `🟢 Hongera ${name}! ${result.message}`;
             msgDiv.style.color = "#10b981";
-            document.getElementById('reg-form').reset();
-            document.getElementById('secret-input-container').style.display = 'none';
+            const regForm = document.getElementById('reg-form');
+            if (regForm) regForm.reset();
+            const secretContainer = document.getElementById('secret-input-container');
+            if (secretContainer) secretContainer.style.display = 'none';
         } else {
             msgDiv.innerHTML = `🔴 Kosa: ${result.message}`;
             msgDiv.style.color = "#ef4444";
@@ -99,29 +118,38 @@ async function handleRegistration(event) {
     }
 }
 
-// ====== 5. UTARATIBU WA PWA & ICON DOWNLOAD ======
+// ====== 5. UTARATIBU WA PWA INSTALLATION ======
 let deferredPrompt;
 window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
-    document.getElementById('install-container').style.display = 'block';
-});
-
-document.getElementById('install-btn').addEventListener('click', async () => {
-    if (deferredPrompt) {
-        deferredPrompt.prompt();
-        const { outcome } = await deferredPrompt.userChoice;
-        if (outcome === 'accepted') {
-            document.getElementById('install-container').style.display = 'none';
-        }
-        deferredPrompt = null;
+    const installContainer = document.getElementById('install-container');
+    if (installContainer) {
+        installContainer.style.display = 'block';
     }
 });
+
+const installBtn = document.getElementById('install-btn');
+    if (installBtn) {
+    installBtn.addEventListener('click', async () => {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+                const installContainer = document.getElementById('install-container');
+                if (installContainer) installContainer.style.display = 'none';
+            }
+            deferredPrompt = null;
+        }
+    });
+}
 
 // ====== 6. USIMAMIZI WA PASSWORD YA ADMIN ("senior") ======
 function togglePasswordReset() {
     const area = document.getElementById('password-reset-area');
-    area.style.display = area.style.display === 'none' ? 'block' : 'none';
+    if (area) {
+        area.style.display = area.style.display === 'none' ? 'block' : 'none';
+    }
 }
 
 function changeAdminPassword() {
@@ -129,10 +157,12 @@ function changeAdminPassword() {
     const newPass = document.getElementById('new-admin-pass').value.trim();
     const msg = document.getElementById('admin-reset-msg');
 
+    if (!msg) return;
+
     if (secretWord.toLowerCase() === "senior") {
         if (newPass.length >= 4) {
             localStorage.setItem('eftAdminPassword', newPass);
-            msg.innerHTML = "✅ Nenosiri la Admin limebadilishwa!";
+            msg.innerHTML = "✅ Nenosiri la Admin limebadilishwa kikamilifu!";
             msg.style.color = "#10b981";
             document.getElementById('secret-senior-word').value = "";
             document.getElementById('new-admin-pass').value = "";
@@ -148,13 +178,11 @@ function changeAdminPassword() {
 
 function loginAdmin() {
     const inputPass = document.getElementById('admin-login-pass').value;
-    const currentAdminPass = localStorage.getItem('eftAdminPassword') || "tinka2026";[span_0](start_span)[span_0](end_span)
+    const currentAdminPass = localStorage.getItem('eftAdminPassword') || "tinka2026";
 
     if (inputPass === currentAdminPass) {
         alert("🛡️ Karibu Kwenye Jopo la Usimamizi la Tinka Tech!");
-        // Hapa panajifungua baada ya login sahihi
     } else {
         alert("❌ Nenosiri si sahihi!");
     }
-                                 }
-        
+}
