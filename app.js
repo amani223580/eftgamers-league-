@@ -6,6 +6,15 @@ let fixtures = JSON.parse(localStorage.getItem('eftFixtures')) || [];
 document.addEventListener("DOMContentLoaded", () => {
     renderPlayerLists();
     renderFixturesList();
+    updateMatchSelectDropdown();
+    renderLiveScores();
+    renderStandings();
+    
+    // Kusikiliza mabadiliko ya chujio la dropdown ili kubadili label
+    const matchSelect = document.getElementById('match-select');
+    if (matchSelect) {
+        matchSelect.addEventListener('change', handleMatchSelectChange);
+    }
 });
 
 // ====== 1. MENU ROUTING ======
@@ -49,7 +58,7 @@ function triggerSecretEngine() {
     }
 }
 
-// ====== 3. MTAMBO WA USAJILI + AUTO LEAGUE OVERFLOW ======
+// ====== 3. MTAMBO WA USAJILI ======
 function handleRegistration(event) {
     event.preventDefault();
     
@@ -58,18 +67,15 @@ function handleRegistration(event) {
     const bypassKey = document.getElementById('secret-bypass-key') ? document.getElementById('secret-bypass-key').value.trim() : '';
     const msgDiv = document.getElementById('reg-message');
 
-    // Angalia jina kama tayari lipo
     if (players.some(p => p.name.toLowerCase() === name.toLowerCase())) {
         msgDiv.innerHTML = "❌ Jina hili lishajisajili kwenye mfumo!";
         msgDiv.style.color = "#ef4444";
         return;
     }
 
-    // MAPANGO YA LIGI YA KIOTOMATIKI (Max 16 kwa kila Ligi)
     const league1Count = players.filter(p => p.league === 'League 1').length;
     const assignedLeague = league1Count < 16 ? 'League 1' : 'League 2';
 
-    // Tengeneza profile mpya ya mchezaji
     const newPlayer = {
         id: 'PLY-' + Date.now(),
         name: name,
@@ -82,15 +88,14 @@ function handleRegistration(event) {
     players.push(newPlayer);
     localStorage.setItem('eftPlayers', JSON.stringify(players));
     
-    // Sasisha kurasa zote papo hapo (Live Update)
     renderPlayerLists();
+    renderStandings(); // Update table upya
     if (document.getElementById('admin-dashboard-area').style.display === 'block') {
         adminVerifyPayments(); 
     }
 
-    // Ujumbe wa mafanikio
     if (newPlayer.status === 'Verified') {
-        msgDiv.innerHTML = `🟢 Hongera ${name}! [🔑 PREMIUM BYPASS] Umesajiliwa na Kudhinishwa kiotomatiki kwenye ${assignedLeague}!`;
+        msgDiv.innerHTML = `🟢 Hongera ${name}! [🔑 PREMIUM] Umesajiliwa na Kudhinishwa kiotomatiki kwenye ${assignedLeague}!`;
         msgDiv.style.color = "#10b981";
     } else {
         msgDiv.innerHTML = `🟡 Hongera ${name}! Umesajiliwa kwenye ${assignedLeague}. Subiri Admin ahakiki malipo yako ili uingizwe kwenye ratiba.`;
@@ -101,7 +106,6 @@ function handleRegistration(event) {
     if (document.getElementById('secret-input-container')) document.getElementById('secret-input-container').style.display = 'none';
 }
 
-// ====== 4. RENDERING YA LIVE ROSTER YA WACHEZAJI (PUBLIC VIEW) ======
 function renderPlayerLists() {
     const listDiv = document.getElementById('contacts-list');
     if (!listDiv) return;
@@ -128,9 +132,201 @@ function renderPlayerLists() {
     listDiv.innerHTML = html;
 }
 
-// ====== 5. INTERACTIVE ADMIN HUB FUNCTIONALITIES ======
+// ====== 4. MTAMBO MPYA WA KUTUMA MATOKEO (AUTOMATIC SUBMISSION ENGINE) ======
 
-// A. Kitufe cha Hakiki Malipo (Inaleta list na kitufe cha Verify kwa kila mmoja)
+// A. Kusasisha Dropdown ya kuchagua mechi kwenye fomu ya wachezaji
+function updateMatchSelectDropdown() {
+    const select = document.getElementById('match-select');
+    if (!select) return;
+
+    // Chuja mechi ambazo bado hazijachezwa (score === null)
+    const activeFixtures = fixtures.filter(f => f.score === null);
+
+    if (activeFixtures.length === 0) {
+        select.innerHTML = "<option value=''>-- Hakuna mechi amilifu zilizopangwa kwa sasa --</option>";
+        return;
+    }
+
+    let html = "<option value=''>-- Chagua Mechi Yako Hapa --</option>";
+    activeFixtures.forEach(f => {
+        html += `<option value="${f.matchId}" data-home="${f.home}" data-away="${f.away}">[${f.league}] ${f.home} VS ${f.away}</option>`;
+    });
+    select.innerHTML = html;
+}
+
+// B. Kubadili herufi za Label kulingana na mechi iliyochaguliwa
+function handleMatchSelectChange() {
+    const select = document.getElementById('match-select');
+    const selectedOption = select.options[select.selectedIndex];
+    
+    const homeLabel = document.getElementById('home-label');
+    const awayLabel = document.getElementById('away-label');
+
+    if (selectedOption && selectedOption.value !== "") {
+        const homeName = selectedOption.getAttribute('data-home');
+        const awayName = selectedOption.getAttribute('data-away');
+        homeLabel.innerHTML = `Magoli ya 🏠 <strong>${homeName}</strong>:`;
+        awayLabel.innerHTML = `Magoli ya 🚀 <strong>${awayName}</strong>:`;
+    } else {
+        homeLabel.innerHTML = "Magoli ya Home:";
+        awayLabel.innerHTML = "Magoli ya Away:";
+    }
+}
+
+// C. Kushughulikia kitendo cha kutuma matokeo ya Mechi kiotomatiki
+function handleResultSubmission(event) {
+    event.preventDefault();
+
+    const matchId = document.getElementById('match-select').value;
+    const homeScore = parseInt(document.getElementById('home-score').value);
+    const awayScore = parseInt(document.getElementById('away-score').value);
+    const msg = document.getElementById('submit-msg');
+
+    if (!matchId) {
+        alert("Tafadhali chagua mechi kwanza!");
+        return;
+    }
+
+    // Sasisha score ya mechi kwenye array kuu
+    fixtures = fixtures.map(f => {
+        if (f.matchId === matchId) {
+            f.score = { home: homeScore, away: awayScore };
+        }
+        return f;
+    });
+
+    // Hifadhi kwenye LocalStorage
+    localStorage.setItem('eftFixtures', JSON.stringify(fixtures));
+
+    // Refresha kurasa zote zinazotegemea matokeo papo hapo!
+    updateMatchSelectDropdown();
+    renderLiveScores();
+    renderStandings(); // Mtambo unapiga hesabu za pointi upya hapa hapa!
+    renderFixturesList();
+
+    msg.innerHTML = "🟢 Matokeo yametumwa na msimamo umesasishwa kiotomatiki!";
+    msg.style.color = "#10b981";
+    document.getElementById('results-form').reset();
+    document.getElementById('home-label').innerHTML = "Magoli ya Home:";
+    document.getElementById('away-label').innerHTML = "Magoli ya Away:";
+
+    setTimeout(() => { msg.innerHTML = ""; }, 4000);
+}
+
+// D. Kuonyesha orodha ya matokeo yote ya Live Scores yaliyochezwa
+function renderLiveScores() {
+    const container = document.getElementById('live-scores-container');
+    if (!container) return;
+
+    const playedMatches = fixtures.filter(f => f.score !== null);
+
+    if (playedMatches.length === 0) {
+        container.innerHTML = "<p style='color: #9ca3af;'>Bado hakuna mechi zilizochezwa.</p>";
+        return;
+    }
+
+    let html = "<div style='display:grid; gap:12px;'>";
+    playedMatches.forEach(m => {
+        html += `<div style='background-color:#1f2937; padding:15px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; border-left: 4px solid #10b981;'>
+            <div style='font-size:12px; color:#9ca3af;'>${m.league} <br><span class="score-display">FT</span></div>
+            <div style='flex:1; text-align:right; font-weight:bold; padding-right:15px;'>${m.home}</div>
+            <div style='background-color:#374151; padding:6px 16px; border-radius:4px; font-weight:bold; color:#10b981; font-size:18px;'>
+                ${m.score.home} - ${m.score.away}
+            </div>
+            <div style='flex:1; text-align:left; font-weight:bold; padding-left:15px;'>${m.away}</div>
+        </div>`;
+    });
+    html += "</div>";
+    container.innerHTML = html;
+}
+
+// ====== 5. ENGINE YA MSIMAMO WA LIGI (AUTOMATIC STANDINGS CALCULATOR) ======
+function renderStandings() {
+    const container = document.getElementById('standings-container');
+    if (!container) return;
+
+    const verifiedPlayers = players.filter(p => p.status === 'Verified');
+
+    if (verifiedPlayers.length === 0) {
+        container.innerHTML = "<p style='color: #9ca3af;'>Msimamo utatengenezwa mechi zikianza kuchezwa.</p>";
+        return;
+    }
+
+    const leagues = ['League 1', 'League 2'];
+    let finalHtml = "";
+
+    leagues.forEach(lg => {
+        const lgPlayers = verifiedPlayers.filter(p => p.league === lg);
+        if (lgPlayers.length === 0) return;
+
+        // Tengeneza muundo wa msimamo kwa kila timu ya ligi hii
+        let tableData = {};
+        lgPlayers.forEach(p => {
+            tableData[p.name] = { name: p.name, pld: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0 };
+        });
+
+        // Soma mechi zote zilizochezwa kwenye ligi hii na kukokotoa pointi
+        const lgMatches = fixtures.filter(f => f.league === lg && f.score !== null);
+        lgMatches.forEach(m => {
+            if (tableData[m.home] && tableData[m.away]) {
+                tableData[m.home].pld += 1;
+                tableData[m.away].pld += 1;
+                tableData[m.home].gf += m.score.home;
+                tableData[m.home].ga += m.score.away;
+                tableData[m.away].gf += m.score.away;
+                tableData[m.away].ga += m.score.home;
+                tableData[m.home].gd = tableData[m.home].gf - tableData[m.home].ga;
+                tableData[m.away].gd = tableData[m.away].gf - tableData[m.away].ga;
+
+                if (m.score.home > m.score.away) {
+                    tableData[m.home].w += 1;
+                    tableData[m.home].pts += 3;
+                    tableData[m.away].l += 1;
+                } else if (m.score.home < m.score.away) {
+                    tableData[m.away].w += 1;
+                    tableData[m.away].pts += 3;
+                    tableData[m.home].l += 1;
+                } else {
+                    tableData[m.home].d += 1;
+                    tableData[m.home].pts += 1;
+                    tableData[m.away].d += 1;
+                    tableData[m.away].pts += 1;
+                }
+            }
+        });
+
+        // Badilisha kuwa array na panga kwa Pointi, kisha Tofauti ya Magoli (Goal Difference)
+        let sortedData = Object.values(tableData).sort((a, b) => {
+            if (b.pts !== a.pts) return b.pts - a.pts;
+            return b.gd - a.gd;
+        });
+
+        // Tengeneza Jedwali la HTML
+        finalHtml += `<h3 style='color: #10b981; margin-top:25px; border-left: 4px solid #10b981; padding-left:10px;'>📊 Msimamo Rasmi - ${lg}</h3>
+        <div class="card info" style="overflow-x: auto; margin-top:10px; padding:0;">
+            <table style="width: 100%; min-width: 600px; border-collapse: collapse; text-align: center; color: white;">
+                <tr style="background-color: #374151; border-bottom: 2px solid #1f2937;">
+                    <th style="padding: 12px; text-align: left;">Nafasi & Mchezaji</th>
+                    <th>Pld</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th style="color: #10b981;">Pts</th>
+                </tr>`;
+        
+        sortedData.forEach((row, index) => {
+            finalHtml += `<tr style="border-bottom: 1px solid #374151; background-color: ${index < 4 ? 'rgba(16,185,129,0.05)' : 'transparent'}">
+                <td style="padding: 12px; text-align: left;"><strong>${index + 1}. ${row.name}</strong></td>
+                <td>${row.pld}</td><td>${row.w}</td><td>${row.d}</td><td>${row.l}</td>
+                <td>${row.gf}</td><td>${row.ga}</td>
+                <td style="color: ${row.gd >= 0 ? '#10b981' : '#ef4444'}">${row.gd > 0 ? '+' + row.gd : row.gd}</td>
+                <td style="color: #10b981; font-weight: bold; font-size:16px;">${row.pts}</td>
+            </tr>`;
+        });
+
+        finalHtml += `</table></div>`;
+    });
+
+    container.innerHTML = finalHtml;
+}
+
+// ====== 6. INTERACTIVE ADMIN HUB ======
 function adminVerifyPayments() {
     const zone = document.getElementById('admin-dynamic-content');
     const pendingPlayers = players.filter(p => p.status === 'Pending');
@@ -155,7 +351,6 @@ function adminVerifyPayments() {
     zone.innerHTML = html;
 }
 
-// Amri inayotekelezwa admin akibonyeza "Verify ✅" mbele ya mchezaji
 function clickVerifyPlayer(id) {
     players = players.map(p => {
         if (p.id === id) p.status = 'Verified';
@@ -163,12 +358,12 @@ function clickVerifyPlayer(id) {
     });
     localStorage.setItem('eftPlayers', JSON.stringify(players));
     
-    // Live refresh ya views zote zote mbili hapo hapo!
     renderPlayerLists();
     adminVerifyPayments();
+    renderStandings(); 
+    updateMatchSelectDropdown();
 }
 
-// B. Kitufe cha Kuandaa na Kuanzisha Ratiba (Soma Verified Tu kuanzia wawili)
 function adminOpenFixtureControl() {
     const zone = document.getElementById('admin-dynamic-content');
     const verifiedPlayers = players.filter(p => p.status === 'Verified');
@@ -178,7 +373,6 @@ function adminOpenFixtureControl() {
         return;
     }
 
-    // Panga wachezaji kwa ligi zao
     const l1 = verifiedPlayers.filter(p => p.league === 'League 1');
     const l2 = verifiedPlayers.filter(p => p.league === 'League 2');
 
@@ -197,14 +391,12 @@ function adminOpenFixtureControl() {
     zone.innerHTML = html;
 }
 
-// Algorithm ya kuzalisha Mechi za mzunguko (Round Robin Generator)
 function generateLeagueFixtures(leagueName) {
     const pool = players.filter(p => p.status === 'Verified' && p.league === leagueName);
     
-    // Futa ratiba ya zamani ya ligi hii tu kama ipo
+    // Futa mechi za zamani za ligi hii tu
     fixtures = fixtures.filter(f => f.league !== leagueName);
 
-    // Kizalisha Mechi (Round Robin algorithm)
     for (let i = 0; i < pool.length; i++) {
         for (let j = i + 1; j < pool.length; j++) {
             fixtures.push({
@@ -212,18 +404,20 @@ function generateLeagueFixtures(leagueName) {
                 league: leagueName,
                 home: pool[i].name,
                 away: pool[j].name,
-                score: null // Bado haijachezwa
+                score: null
             });
         }
     }
 
     localStorage.setItem('eftFixtures', JSON.stringify(fixtures));
     renderFixturesList();
-    alert(`🎯 Hongera! Mechi za ${leagueName} zimepangwa kiotomatiki na kutupwa ratibani!`);
+    updateMatchSelectDropdown();
+    renderLiveScores();
+    renderStandings();
+    alert(`🎯 Hongera! Mechi za ${leagueName} zimepangwa na kusasishwa kwenye menyu zote!`);
     adminOpenFixtureControl();
 }
 
-// C. Kushusha orodha ya Mechi kule kwenye "Ratiba Kamili"
 function renderFixturesList() {
     const container = document.getElementById('fixtures-list');
     if (!container) return;
@@ -239,13 +433,14 @@ function renderFixturesList() {
     leagues.forEach(lg => {
         const lgMatches = fixtures.filter(f => f.league === lg);
         if (lgMatches.length > 0) {
-            html += `<h3 style='color: #3b82f6; margin-top:20px; border-bottom: 1px solid #374151; padding-bottom:5px;'>🗓️ ${lg} - Mechi Rasmi</h3>
+            html += `<h3 style='color: #3b82f6; margin-top:20px; border-bottom: 1px solid #374151; padding-bottom:5px;'>🗓️ ${lg} - Mechi Zilizopangwa</h3>
             <div style='display:grid; gap:10px; margin-top:10px;'>`;
             
             lgMatches.forEach(m => {
+                const statusStr = m.score !== null ? `<span style="color:#10b981; font-weight:bold;">${m.score.home} - ${m.score.away} (FT)</span>` : "<span style='color:#6b7280;'>Haijachezwa</span>";
                 html += `<div style='background-color:#1f2937; padding:12px; border-radius:6px; display:flex; justify-content:space-between; align-items:center;'>
                     <span style='flex:1; text-align:right; font-weight:bold;'>${m.home}</span>
-                    <span style='background-color:#374151; padding:4px 12px; border-radius:4px; margin: 0 15px; font-size:12px; color:#10b981;'>VS</span>
+                    <span style='background-color:#374151; padding:4px 12px; border-radius:4px; margin: 0 15px; font-size:12px;'>${statusStr}</span>
                     <span style='flex:1; text-align:left; font-weight:bold;'>${m.away}</span>
                 </div>`;
             });
@@ -256,7 +451,6 @@ function renderFixturesList() {
     container.innerHTML = html;
 }
 
-// D. Reset System (Kusafisha Data kwa Msimu Mpya)
 function adminClearAllData() {
     if (confirm("🚨 Je, una uhakika unataka kufuta wachezaji na ratiba zote kuanza upya?")) {
         localStorage.clear();
@@ -264,11 +458,14 @@ function adminClearAllData() {
         fixtures = [];
         renderPlayerLists();
         renderFixturesList();
+        updateMatchSelectDropdown();
+        renderLiveScores();
+        renderStandings();
         document.getElementById('admin-dynamic-content').innerHTML = "<p style='color:#10b981; text-align:center;'>Mfumo umesafishwa kabisa!</p>";
     }
 }
 
-// ====== 6. ADMIN SYSTEM ACCESS AUTH ======
+// ====== 7. ADMIN SYSTEM ACCESS AUTH ======
 function loginAdmin() {
     const inputPass = document.getElementById('admin-login-pass').value;
     const currentAdminPass = localStorage.getItem('eftAdminPassword') || "tinka2026";
@@ -284,25 +481,4 @@ function loginAdmin() {
 
 function togglePasswordReset() {
     const area = document.getElementById('password-reset-area');
-    if (area) area.style.display = area.style.display === 'none' ? 'block' : 'none';
-}
-
-function changeAdminPassword() {
-    const secretWord = document.getElementById('secret-senior-word').value.trim();
-    const newPass = document.getElementById('new-admin-pass').value.trim();
-    const msg = document.getElementById('admin-reset-msg');
-
-    if (secretWord.toLowerCase() === "senior") {
-        if (newPass.length >= 4) {
-            localStorage.setItem('eftAdminPassword', newPass);
-            msg.innerHTML = "✅ Nenosiri la Admin limebadilishwa!";
-            msg.style.color = "#10b981";
-        } else {
-            msg.innerHTML = "⚠️ Nenosiri liwe refu kidogo.";
-            msg.style.color = "#f59e0b";
-        }
-    } else {
-        msg.innerHTML = "❌ Neno la siri si sahihi!";
-        msg.style.color = "#ef4444";
-    }
-            }
+    if (area) area.style.display = area.style.
