@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EFT Gamers League - V13</title>
-    <!-- Google Fonts kwa ajili ya Muonekano Safi wa Ki-eSports -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <style>
@@ -46,7 +45,6 @@
             width: 100%;
         }
 
-        /* Sidebar ya Kushoto */
         .sidebar {
             width: 280px;
             background-color: var(--bg-secondary);
@@ -61,7 +59,7 @@
 
         .brand-area {
             text-align: center;
-            margin-bottom: 35px;
+            margin-bottom: 25px;
             padding-bottom: 15px;
             border-bottom: 2px solid var(--bg-tertiary);
         }
@@ -80,21 +78,21 @@
             margin-top: 5px;
         }
 
-        /* Menu Navigation */
         .nav-menu {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
             flex: 1;
+            overflow-y: auto;
         }
 
         .nav-btn {
             background: none;
             border: none;
             color: var(--text-muted);
-            padding: 14px 18px;
+            padding: 12px 16px;
             text-align: left;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             border-radius: 8px;
@@ -115,7 +113,6 @@
             box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
         }
 
-        /* Main Workspace Content */
         .main-content {
             flex: 1;
             margin-left: 280px;
@@ -124,7 +121,6 @@
             min-height: 100vh;
         }
 
-        /* Dynamic Page Handling */
         .page-section {
             display: none;
             animation: fadeIn 0.4s ease-in-out;
@@ -159,20 +155,38 @@
             box-shadow: 0 8px 16px rgba(0,0,0,0.2);
         }
 
-        /* Forms Layout */
-        .form-group {
-            margin-bottom: 20px;
+        .rules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
         }
 
-        .form-group label {
-            display: block;
-            font-size: 14px;
+        .rules-grid .card h3 {
+            margin-bottom: 15px;
+            font-size: 18px;
+            color: var(--accent-blue);
+        }
+        
+        .rules-grid .card.warning h3 {
+            color: var(--warning);
+        }
+
+        .rules-grid ul {
+            list-style-type: disc;
+            padding-left: 20px;
             color: var(--text-muted);
-            margin-bottom: 8px;
-            font-weight: 600;
+            line-height: 1.8;
+            font-size: 14px;
         }
 
-        input[type="text"], input[type="tel"], input[type="password"], select {
+        .rules-grid ul li strong {
+            color: var(--text-main);
+        }
+
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 14px; color: var(--text-muted); margin-bottom: 8px; font-weight: 600; }
+        
+        input[type="text"], input[type="tel"], input[type="password"], input[type="number"], select {
             width: 100%;
             padding: 12px 16px;
             background-color: var(--bg-primary);
@@ -205,151 +219,38 @@
             margin-top: 10px;
         }
 
-        .submit-btn:hover {
-            background-color: #0d9488;
-        }
+        .submit-btn:hover { background-color: #0d9488; }
 
-        /* Admin Tables */
-        .admin-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-            text-align: left;
-        }
+        .admin-table { width: 100%; border-collapse: collapse; margin-top: 15px; text-align: left; }
+        .admin-table th, .admin-table td { padding: 14px 16px; border-bottom: 1px solid var(--bg-tertiary); }
+        .admin-table th { background-color: var(--bg-tertiary); color: var(--text-main); font-weight: 600; font-size: 14px;}
+        .admin-table td { font-size: 14px; }
 
-        .admin-table th, .admin-table td {
-            padding: 14px 16px;
-            border-bottom: 1px solid var(--bg-tertiary);
-        }
+        .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+        .status-verified { background-color: rgba(16, 185, 129, 0.15); color: var(--accent-green); border: 1px solid var(--accent-green); }
+        .status-pending { background-color: rgba(245, 158, 11, 0.15); color: var(--warning); border: 1px solid var(--warning); }
+        .mini-btn { padding: 6px 12px; border-radius: 6px; border: none; font-weight: 600; cursor: pointer; font-size: 12px; }
 
-        .admin-table th {
-            background-color: var(--bg-tertiary);
-            color: var(--text-main);
-            font-weight: 600;
-        }
+        .admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 25px; }
+        .admin-control-btn { background-color: var(--bg-tertiary); color: white; border: 1px solid #4b5563; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; text-align: center; transition: all 0.2s ease; }
+        .admin-control-btn:hover { background-color: var(--accent-blue); border-color: var(--accent-blue); }
 
-        /* Badges */
-        .status-badge {
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        .status-verified {
-            background-color: rgba(16, 185, 129, 0.15);
-            color: var(--accent-green);
-            border: 1px solid var(--accent-green);
-        }
-
-        .status-pending {
-            background-color: rgba(245, 158, 11, 0.15);
-            color: var(--warning);
-            border: 1px solid var(--warning);
-        }
-
-        .mini-btn {
-            padding: 6px 12px;
-            border-radius: 6px;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-            font-size: 12px;
-        }
-
-        /* Admin Action Control Hub Grid */
-        .admin-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 12px;
-            margin-bottom: 25px;
-        }
-
-        .admin-control-btn {
-            background-color: var(--bg-tertiary);
-            color: white;
-            border: 1px solid #4b5563;
-            padding: 12px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 13px;
-            text-align: center;
-            transition: all 0.2s ease;
-        }
-
-        .admin-control-btn:hover {
-            background-color: var(--accent-blue);
-            border-color: var(--accent-blue);
-        }
-
-        /* PWA Banner */
-        #install-container {
-            display: none;
-            background-color: var(--bg-secondary);
-            border-top: 3px solid var(--accent-green);
-            padding: 15px;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            z-index: 999;
-            box-shadow: 0 -4px 10px rgba(0,0,0,0.5);
-        }
+        #install-container { display: none; background-color: var(--bg-secondary); border-top: 3px solid var(--accent-green); padding: 15px; position: fixed; bottom: 0; left: 0; width: 100%; z-index: 999; box-shadow: 0 -4px 10px rgba(0,0,0,0.5); }
 
         /* ==========================================================================
-           4. RESPONSIVE DESIGN (MOBILE SWITCH TO BOTTOM NAVIGATION)
+           4. RESPONSIVE DESIGN (MOBILE VIEW)
            ========================================================================== */
         @media (max-width: 768px) {
-            body {
-                flex-direction: column;
-            }
-
+            body { flex-direction: column; }
             .sidebar {
-                width: 100%;
-                height: auto;
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                top: auto;
-                flex-direction: row;
-                padding: 10px;
-                border-right: none;
-                border-top: 1px solid var(--bg-tertiary);
-                box-shadow: 0 -4px 10px rgba(0,0,0,0.3);
+                width: 100%; height: auto; position: fixed; bottom: 0; left: 0; top: auto; flex-direction: row; padding: 10px; border-right: none; border-top: 1px solid var(--bg-tertiary); box-shadow: 0 -4px 10px rgba(0,0,0,0.3);
+                overflow-x: auto;
             }
-
-            .brand-area {
-                display: none; /* Ficha nembo kwenye simu ili kupata nafasi */
-            }
-
-            .nav-menu {
-                flex-direction: row;
-                justify-content: space-around;
-                width: 100%;
-                gap: 5px;
-            }
-
-            .nav-btn {
-                padding: 10px;
-                font-size: 12px;
-                flex-direction: column;
-                align-items: center;
-                gap: 4px;
-                flex: 1;
-                text-align: center;
-            }
-
-            .main-content {
-                margin-left: 0;
-                padding: 20px;
-                padding-bottom: 90px; /* Nafasi ili kuzuia menu isifiche content */
-            }
-
-            h2 {
-                font-size: 20px;
-            }
+            .brand-area { display: none; }
+            .nav-menu { flex-direction: row; justify-content: flex-start; width: max-content; gap: 5px; }
+            .nav-btn { padding: 10px 15px; font-size: 12px; white-space: nowrap; }
+            .main-content { margin-left: 0; padding: 20px; padding-bottom: 90px; }
+            h2 { font-size: 20px; }
         }
     </style>
 </head>
@@ -357,30 +258,59 @@
 
     <div class="app-container">
         
-        <!-- ==========================================================================
-           SIDEBAR / BOTTOM NAVIGATION AREA
-           ========================================================================== */ -->
         <aside class="sidebar">
             <div class="brand-area">
                 <h1 onclick="triggerSecretEngine()" style="cursor:pointer;">EFT-GAMERS</h1>
                 <p>League Management V13</p>
             </div>
+            
             <nav class="nav-menu">
-                <button class="nav-btn active" onclick="showPage('registration')">📝 Usajili</button>
-                <button class="nav-btn" onclick="showPage('live-scores')">📊 Matokeo</button>
+                <button class="nav-btn active" onclick="showPage('home')">🏠 Home & Sheria</button>
+                <button class="nav-btn" onclick="showPage('registration')">📝 Usajili</button>
+                <button class="nav-btn" onclick="showPage('contacts')">👥 Wachezaji</button>
+                <button class="nav-btn" onclick="showPage('submit-results')">⚽ Tuma Matokeo</button>
+                <button class="nav-btn" onclick="showPage('live-scores')">📊 Matokeo Live</button>
                 <button class="nav-btn" onclick="showPage('standings')">🏆 Msimamo</button>
                 <button class="nav-btn" onclick="showPage('fixtures')">🗓️ Ratiba</button>
-                <button class="nav-btn" onclick="showPage('admin-hub')">⚙️ Admin</button>
+                <button class="nav-btn" onclick="showPage('admin-hub')">⚙️ Admin Control</button>
             </nav>
         </aside>
 
-        <!-- ==========================================================================
-           MAIN CONTENT CONTROLLER AREA
-           ========================================================================== */ -->
         <main class="main-content">
 
-            <!-- PAGE 1: USAJILI WA WACHEZAJI -->
-            <section id="registration" class="page-section active-page">
+            <section id="home" class="page-section active-page">
+                <h2>Karibu EftGamers-League Hub</h2>
+                <p style="color: var(--text-muted); margin-bottom: 25px;">Mfumo thabiti wa kiotomatiki unaoendesha mashindano ya eFootball kuanzia usajili hadi kutwaa taji.</p>
+                
+                <div class="rules-grid">
+                    <div class="card warning">
+                        <h3>⚙  Sheria za Michezo (Gameplay)</h3>
+                        <ul>
+                            <li><strong>Control:</strong> Full Human Controlled (Ni marufuku kutumia AI).</li>
+                            <li><strong>Smart Assist:</strong> NO Smart Assist (Imezuiwa kabisa).</li>
+                            <li><strong>Muda wa Mechi:</strong> Dakika 10.</li>
+                            <li><strong>Makundi:</strong> Hakuna Extra Time wala Penati. Mechi inaweza kuisha kwa Droo.</li>
+                            <li><strong>Knockouts:</strong> Lazima mshindi apatikane (Extra Time & Penati).</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="card info">
+                        <h3>🏆 Mfumo wa Mashindano</h3>
+                        <ul>
+                            <li>Ligi inajaza wachezaji 16 kiwango cha juu.</li>
+                            <li>Mchezaji atapangwa kiotomatiki kwenye League 1 au League 2.</li>
+                            <li>Washindi wa makundi watafuzu hatua za mtoano.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card" style="border-left: 4px solid var(--accent-blue);">
+                    <h3 style="color: var(--accent-blue); margin-bottom: 10px;">Maelekezo ya Kiingilio</h3>
+                    <p style="font-size: 14px; color: var(--text-muted);">Tuma kiingilio cha <strong>TZS 1,000</strong> kwenda namba <strong>0792460625</strong>, kisha nenda kwenye menyu ya "Usajili" kujaza fomu na kuthibitishwa.</p>
+                </div>
+            </section>
+
+            <section id="registration" class="page-section">
                 <h2>📝 Mfumo wa Usajili wa Wachezaji</h2>
                 
                 <div class="card">
@@ -398,46 +328,74 @@
                         <div class="form-group">
                             <label>Njia ya Malipo:</label>
                             <select id="pay-method" onchange="togglePaymentFields()">
-                                <option value="free">Bure (Majaribio / Free Entry)</option>
                                 <option value="manual">Malipo ya Kawaida (M-Pesa/Tigo/Airtel)</option>
+                                <option value="free">Bure (Majaribio / Free Entry)</option>
                             </select>
                         </div>
 
-                        <!-- Sehemu ya Maelezo ya Muamala (Inafichuka ikichaguliwa Manual) -->
-                        <div class="form-group" id="transaction-field" style="display: none; background: var(--bg-primary); padding: 15px; border-radius: 8px; border-left: 4px solid var(--warning);">
+                        <div class="form-group" id="transaction-field" style="background: var(--bg-primary); padding: 15px; border-radius: 8px; border-left: 4px solid var(--warning);">
                             <p style="font-size: 13px; color: var(--warning); margin-bottom: 8px;">Tuma ada kwenda namba ya Admin. Weka namba ya muamala chini:</p>
                             <label>Namba ya Muamala (TXID):</label>
                             <input type="text" id="reg-txid" placeholder="Mfano: PP82LLK91">
                         </div>
 
-                        <!-- Mtambo wa Siri wa Bypass (Unawashwa kwa siri tu) -->
                         <div class="form-group" id="secret-input-container" style="display: none; background: #111827; padding: 12px; border-radius: 8px; border: 1px dashed var(--accent-green);">
                             <label style="color: var(--accent-green);">🔑 Ingiza Key ya Siri ya Kiotomatiki:</label>
-                            <input type="text" id="secret-bypass-key" placeholder="Weka kodi ya siri hapa...">
+                            <input type="password" id="secret-bypass-key" placeholder="Weka kodi ya siri hapa...">
                         </div>
 
                         <button type="submit" class="submit-btn">Kamilisha Usajili 🚀</button>
                     </form>
                     <div id="reg-message" style="margin-top: 15px; font-weight: 600; text-align: center;"></div>
                 </div>
+            </section>
 
-                <!-- Orodha ya Waliomsajili kwa Ujumla -->
-                <div class="card">
-                    <h3 style="margin-bottom: 15px; color: var(--accent-green);">👥 Orodha ya Wachezaji Kwenye Mfumo</h3>
+            <section id="contacts" class="page-section">
+                <h2>👥 Orodha ya Wachezaji Kwenye Mfumo</h2>
+                <p style="color: var(--text-muted); margin-bottom: 15px;">Wachezaji wote waliosajiliwa na kusubiri uhakiki au kupangwa kwenye Ligi.</p>
+                <div class="card" style="overflow-x: auto;">
                     <div id="contacts-list">
                         <p style="color: var(--text-muted);">Bado hakuna mchezaji yeyote aliyejisajili.</p>
                     </div>
                 </div>
             </section>
 
-            <!-- PAGE 2: LIVE SCORES & CHUJIO -->
+            <section id="submit-results" class="page-section">
+                <h2>⚽ Tuma Matokeo Ya Mechi Yako</h2>
+                <p style="color: var(--text-muted); margin-bottom: 20px;">Mchezaji aliyeshinda au aliyekuwa nyumbani (Home) ndiye anatakiwa kutuma matokeo haya kwa uaminifu.</p>
+                
+                <div class="card" style="border-top: 4px solid var(--warning);">
+                    <form id="results-form" onsubmit="handleResultSubmission(event)">
+                        <div class="form-group">
+                            <label>Chagua Mechi Amilifu uliyocheza:</label>
+                            <select id="match-select">
+                                <option value="">-- Hakuna mechi amilifu zilizopangwa --</option>
+                            </select>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                            <div class="form-group">
+                                <label id="home-label">Magoli ya Home:</label>
+                                <input type="number" id="home-score" min="0" required placeholder="0">
+                            </div>
+                            <div class="form-group">
+                                <label id="away-label">Magoli ya Away:</label>
+                                <input type="number" id="away-score" min="0" required placeholder="0">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="submit-btn" style="background-color: var(--warning); color: #111827;">Tuma Matokeo Papo Hapo ⚡</button>
+                    </form>
+                    <div id="submit-msg" style="margin-top: 15px; text-align: center; font-weight: bold;"></div>
+                </div>
+            </section>
+
             <section id="live-scores" class="page-section">
                 <h2>📊 Matokeo ya Mechi Zilizochezwa</h2>
                 
-                <!-- Chujio la Ligi / Kundi -->
                 <div class="card" style="padding: 15px; margin-bottom: 20px;">
                     <label style="color: var(--text-muted); font-size: 13px; font-weight: 600;">Chagua Ligi / Kundi kuona matokeo yake pekee:</label>
-                    <select id="score-filter" onchange="renderLiveScores()" style="margin-top: 8px; background-color: var(--bg-primary); color: var(--accent-green); font-weight: bold; border-color: var(--bg-tertiary);">
+                    <select id="score-filter" onchange="renderLiveScores()" style="margin-top: 8px; border-color: var(--bg-tertiary);">
                         <option value="all">🌍 Mechi Zote Zilizochezwa</option>
                         <option value="League 1">🏆 League 1 Peke Yake</option>
                         <option value="League 2">🥈 League 2 Peke Yake</option>
@@ -449,7 +407,6 @@
                 </div>
             </section>
 
-            <!-- PAGE 3: MSIMAMO WA LIGI (AUTOMATED STANDINGS) -->
             <section id="standings" class="page-section">
                 <h2>🏆 Msimamo wa Ligi kwa Sasa</h2>
                 <div id="standings-container">
@@ -457,7 +414,6 @@
                 </div>
             </section>
 
-            <!-- PAGE 4: RATIBA ZA LIGI (FIXTURES) -->
             <section id="fixtures" class="page-section">
                 <h2>🗓️ Ratiba Nzima ya Mechi</h2>
                 <div class="card" id="fixtures-list">
@@ -465,11 +421,9 @@
                 </div>
             </section>
 
-            <!-- PAGE 5: ADMIN HUB (KUPANDISHA MATOKEO, VERIFY NA RESET) -->
             <section id="admin-hub" class="page-section">
                 <h2>⚙️ Admin Control Panel</h2>
                 
-                <!-- 1. Sehemu ya Login ya Admin -->
                 <div class="card" id="admin-login-area">
                     <h3 style="margin-bottom: 15px;">Uthibitisho wa Admin</h3>
                     <div class="form-group">
@@ -479,14 +433,12 @@
                     <button class="submit-btn" onclick="loginAdmin()">Fungua Dashboard 🔓</button>
                 </div>
 
-                <!-- 2. Dashboard ya Ndani ya Admin (Inafunguka ikipita login) -->
                 <div class="card" id="admin-dashboard-area" style="display: none;">
                     <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--bg-tertiary); padding-bottom: 10px; margin-bottom: 20px;">
                         <h3 style="color: var(--accent-green);">🎛️ EFT Admin Dashboard</h3>
-                        <button onclick="togglePasswordReset()" class="mini-btn" style="background-color: var(--bg-tertiary); color: white;">Badili Paswedi</button>
+   <button onclick="togglePasswordReset()" class="mini-btn" style="background-color: var(--bg-tertiary); color: white;">Badili Paswedi</button>
                     </div>
 
-                    <!-- Kibonyezo cha Kubadili Password ya Admin -->
                     <div id="password-reset-area" style="display: none; background: var(--bg-primary); padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid var(--bg-tertiary);">
                         <div class="form-group">
                             <label>Neno la Siri la Mkuu (Senior Secret Word):</label>
@@ -500,43 +452,14 @@
                         <div id="admin-reset-msg" style="margin-top: 5px; font-size: 12px; color: var(--accent-green); text-align: center;"></div>
                     </div>
 
-                    <!-- Grid ya Vifungo Vya Kudhibiti Mifumo ya Ndani -->
                     <div class="admin-grid">
                         <button class="admin-control-btn" onclick="adminVerifyPayments()">📋 Uhakiki Wachezaji</button>
                         <button class="admin-control-btn" onclick="adminOpenFixtureControl()">🗓️ Pangilia Ratiba</button>
                         <button class="admin-control-btn" style="background-color: var(--danger); color: white; border-color: var(--danger);" onclick="adminClearAllData()">🗑️ Safisha Data Zote</button>
                     </div>
 
-                    <!-- Eneo la Maonyesho ya Moduli za Admin Dynamic Kulingana na Kitufe Kilichobofyawa -->
                     <div id="admin-dynamic-content" style="background: var(--bg-primary); padding: 15px; border-radius: 8px; border: 1px solid var(--bg-tertiary); min-height: 100px;">
                         <p style="color: var(--text-muted); text-align: center; font-size: 14px;">Chagua kitendo chochote juu kudhibiti msimu.</p>
-                    </div>
-
-                    <!-- Fomu ya Kuingiza Matokeo ya Mechi (Iko ndani ya Admin Dashboard ili kuzuia udanganyifu) -->
-                    <div style="margin-top: 30px; border-top: 2px dashed var(--bg-tertiary); padding-top: 20px;">
-                        <h3 style="color: var(--warning); margin-bottom: 15px;">⚽ Kikokotoo cha Kuingiza Matokeo ya Mechi</h3>
-                        <form id="results-form" onsubmit="handleResultSubmission(event)">
-                            <div class="form-group">
-                                <label>Chagua Mechi Amilifu:</label>
-                                <select id="match-select">
-                                    <option value="">-- Hakuna mechi amilifu zilizopangwa --</option>
-                                </select>
-                            </div>
-                            
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
-                                <div class="form-group">
-                                    <label id="home-label">Magoli ya Home:</label>
-                                    <input type="number" id="home-score" min="0" required placeholder="0" style="width: 100%; padding: 12px; background: var(--bg-primary); border: 1px solid var(--bg-tertiary); color: white; border-radius: 8px;">
-                                </div>
-                                <div class="form-group">
-                                    <label id="away-label">Magoli ya Away:</label>
-                                    <input type="number" id="away-score" min="0" required placeholder="0" style="width: 100%; padding: 12px; background: var(--bg-primary); border: 1px solid var(--bg-tertiary); color: white; border-radius: 8px;">
-                                </div>
-                            </div>
-
-                            <button type="submit" class="submit-btn" style="background-color: var(--warning);">Tuma Matokeo Papo Hapo ⚡</button>
-                        </form>
-                        <div id="submit-msg" style="margin-top: 10px; text-align: center; font-weight: bold;"></div>
                     </div>
                 </div>
             </section>
@@ -544,17 +467,13 @@
         </main>
     </div>
 
-    <!-- ==========================================================================
-       PWA INSTALLATION BANNER COMPONENT
-       ========================================================================== */ -->
     <div id="install-container">
         <div style="display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 10px;">
             <span style="font-size: 14px; font-weight: 600;">Pakua App ya EFT Kwenye Simu Yako Ili Upate Speed Zaidi!</span>
-            <button id="install-btn" class="mini-btn" style="background-color: var(--accent-green); color: white; padding: 8px 16px;">Sakinisha (Install)</button>
+            <button id="install-btn" class="mini-btn" style="background-color: var(--accent-green); color: white; padding: 8px 16px;">Sakinisha</button>
         </div>
     </div>
 
-    <!-- Link ya Script Moja Kuu ya Logic -->
     <script src="app.js"></script>
 </body>
 </html>
